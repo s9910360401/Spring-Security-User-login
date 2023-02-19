@@ -1,0 +1,72 @@
+.height-90{
+	height: 90px;
+}
+.to-top{
+	height: 50px;
+	width: 50px;
+	border-radius: 300px;
+	position: fixed;
+	display: flex;
+	background-color: lightgray;
+	opacity: 0.5;
+	bottom: 10px;
+	right: 10px;
+	align-items: center;
+	justify-content: space-around;
+
+}
+
+.blue{
+	background-color: #FFDFDF;
+	border: 2px solid #BEE3FF;
+}
+.scrollspy-example{
+	height: 250px;
+	border: 1px solid #dee2e6;
+	border-radius: 5px;
+	overflow: auto;
+	padding: 15px;
+}
+body{
+	padding-bottom: 0 !important;
+}
+/*調最上面那一條header的顏色*/
+.bg-headercolor{
+	background-color: #502d19;
+}
+/*調footer的顏色*/
+.bg-footercolor{
+	background-color: #2a4b36;
+}
+
+	
+.bg-columncolor{
+	background-color: #7257d4;
+}
+
+/*調輪播區大字的顏色*/
+.columncolor{
+	font-weight:bold;
+	color:#FFFFFF;
+}
+/*調rest_index裡按鈕顏色*/
+.rest-btn-primary{--bs-btn-color:#fff;--bs-btn-bg:#FB0909;--bs-btn-border-color:#FB0909;--bs-btn-hover-color:#fff;--bs-btn-hover-bg:#F79e1b;--bs-btn-hover-border-color:#F79e1b;--bs-btn-focus-shadow-rgb:49,132,253;--bs-btn-active-color:#fff;--bs-btn-active-bg:#F79e1b;--bs-btn-active-border-color:#F79e1b;--bs-btn-active-shadow:inset 0 3px 5px rgba(0, 0, 0, 0.125);--bs-btn-disabled-color:#fff;--bs-btn-disabled-bg:#FB0909;--bs-btn-disabled-border-color:#FB0909}
+.rest_dish_select_word_color{
+	font-weight:bold;
+	color:#502D19;
+	
+}
+.rest_dish_select_price_color{
+	font-size:20px;
+	font-weight:bold;
+	color:#e95123;	
+}
+.rest_dish_select_qty{
+	font-size:20px;
+	font-weight:bold;		
+}
+.h_center{
+	display: flex;
+	justify-content: center;    
+	align-items: center;
+}

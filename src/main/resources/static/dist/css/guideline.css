@@ -1,0 +1,32 @@
+h1{
+	color: #3C3C3C;
+	font-size: 32px;
+	font-weight: bold;
+}
+.subtitle{
+	color: #3C3C3C;
+	font-size: 20px;
+	font-weight: bolder;
+}
+.content-text{
+	color: #3C3C3C;
+	font-size: 16px;
+	font-weight: normal;
+}
+.warning{
+	color: #FF5B51;
+	font-size: 12px;
+	font-weight: bolder;
+}
+.bg-lightblue{
+	background-color: #CDF3FF;
+}
+.bg-darkblue{
+	background-color: #1C3F6B;
+}
+.border-lightblue{
+	border: 2px solid #CDF3FF;
+}
+.border-darkblue{
+	border: 2px solid #1C3F6B;
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>OGABE|會員註冊</title>
+  <link href="dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="dist/css/carousel.css" rel="stylesheet" />
+  <link href="dist/css/my.css" rel="stylesheet" />
+  <link href="cheatsheet.css" rel="stylesheet" />
+  <link href="dist/css/guideline.css" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-headercolor" aria-label="Fourth navbar example">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html"><img src="images\ogabecolor.png" alt="Ogabe Logo" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04"
+          aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse flex-grow-0" id="navbarsExample04">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <!-- <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.html"
+                  >首頁</a
+                >
+              </li> -->
+            <!-- <li class="nav-item">
+                <a class="nav-link" href="guideline.html">規格書</a>
+              </li> -->
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="index.html">最新消息</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">購物商城</a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="breakpoint.html">咖啡豆</a>
+                </li>
+                <li><a class="dropdown-item" href="#">咖啡器具</a></li>
+                <li>
+                  <a class="dropdown-item" href="#">組合活動</a>
+                </li>
+              </ul>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="forum_welcome.html">論壇</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="rest_index.html">線上訂餐</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="index.html">體驗課程</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="index.html">優惠活動</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="index.html">小遊戲</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="user_login.jsp">登入</a><!--active是調整成高亮
+                -->
+            </li>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+              註冊
+            </button>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <br>
+    <div class="text-center mt-1">
+      <h1>會員註冊</h1>
+    </div>
+
+    <div class="row p-3" style="background-color: #EAE0DA;">
+      <div class="col"></div>
+      <div class="col">
+        <form action="getregister" method="post" name="register-form">
+          <div class="form-group col-sm-12">
+            <label for="exampleInputEmail1">帳號</label>
+            <input type="email" class="form-control" id="UserEmail1" placeholder="請輸入Email" name="useremail">
+          </div><br>
+          <div class="form-group col-sm-12">
+            <label for="exampleInputPassword1">密碼</label>
+            <input type="password" class="form-control" id="UserPassword1" placeholder="請輸入密碼" name="userpwd">
+          </div><br>
+          <div class="form-group col-sm-12">
+            <label for="exampleInputPassword1">密碼確認</label>
+            <input type="password" class="form-control" id="UserPassword2" placeholder="請再次輸入密碼">
+          </div><br>
+          <div class="form-group col-sm-12">
+            <label for="exampleInputPassword1">會員姓名</label>
+            <input type="text" class="form-control" id="UserName" placeholder="請輸入姓名" name="username">
+          </div><br>
+          <div class="form-group col-sm-12">
+            <label for="exampleInputPassword1">會員暱稱</label>
+            <input type="text" class="form-control" id="UserNickname" placeholder="請輸入暱稱" name="usernickname">
+          </div><br>
+          <div class="form-group col-sm-12">
+            <label for="exampleInputPassword1">會員地址</label>
+            <input type="text" class="form-control" id="UserAddress" placeholder="請輸入地址" name="useraddress">
+          </div><br>
+          <div class="form-group col-sm-12">
+            <label for="exampleInputPassword1">會員電話</label>
+            <input type="text" class="form-control" id="UserMobile" placeholder="請輸入電話" name="usertel">
+          </div><br>
+
+          <button type="submit" class="btn btn-primary col-sm-5 ">送出</button>
+
+        </form>
+      </div>
+      <div class="col"></div>
+    </div>
+
+
+
+  </main>
+  <!-- footer -->
+  <footer class="container-fluid mt-1 bg-footercolor text-center text-light link- p-3">
+    <p>
+      <a href="#" class="text-info">關於我們</a> &middot;
+      <a href="#" class="text-info">Q&A</a> &middot;
+      <a href="#" class="text-info">顧客權益</a> &middot;
+      <a href="#" class="text-info">客服中心</a>
+    </p>
+  </footer>
+  <script src="dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
