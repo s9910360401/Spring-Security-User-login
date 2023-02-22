@@ -50,7 +50,7 @@ public class UserVO {
 	private Integer viplevelid = 1;
 	
 	@CreationTimestamp
-	@Column(name="user_datetime", nullable = false, updatable = false)
+	@Column(name="user_datetime", nullable = false, updatable = false, insertable = false)
 	private Date userregidate;
 	
     @ManyToOne

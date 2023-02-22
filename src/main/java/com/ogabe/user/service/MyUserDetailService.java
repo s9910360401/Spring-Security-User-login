@@ -7,14 +7,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.ogabe.user.entity.UserVO;
-import com.ogabe.user.reposity.UserReposity;
+import com.ogabe.user.repository.UserRepository;
 import com.ogabe.user.security.UserPrincipal;
 
 @Service
 public class MyUserDetailService implements UserDetailsService{
 	
 	@Autowired
-	UserReposity userRepo;
+	UserRepository userRepo;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

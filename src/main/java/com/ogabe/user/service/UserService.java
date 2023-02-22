@@ -10,28 +10,28 @@ import org.springframework.stereotype.Service;
 import com.ogabe.user.entity.UserStatusVO;
 import com.ogabe.user.entity.UserVO;
 import com.ogabe.user.model.UserModel;
-import com.ogabe.user.reposity.UserReposity;
-import com.ogabe.user.reposity.UserStatusReposity;
+import com.ogabe.user.repository.UserRepository;
+import com.ogabe.user.repository.UserStatusRepository;
 
 
 @Service
 public class UserService {
 	
 	@Autowired
-	UserReposity repo;
+	UserRepository Userrepo;
 	@Autowired
-	UserStatusReposity statusRepo;
+	UserStatusRepository statusRepo;
 	@Autowired
 	PasswordEncoder passwodEncoder;
 	
 	public List <UserVO> getAllUser() {
 		
-		return repo.findAll();
+		return Userrepo.findAll();
 	}
 	
 	
 	public UserVO getUserById(Integer userid) {
-		Optional<UserVO> uservo = repo.findById(userid);
+		Optional<UserVO> uservo = Userrepo.findById(userid);
 		if(uservo.isPresent()) {
 			return uservo.get();
 		}
@@ -39,17 +39,17 @@ public class UserService {
 	}
 	
 	public UserVO getUserByEmail(String useremail) {
-		UserVO uservo = repo.findByUseremail(useremail);
+		UserVO uservo = Userrepo.findByUseremail(useremail);
 
 		return uservo;
 	}
 	
 	public void saveUser(UserVO uservo) {
-		repo.save(uservo);
+		Userrepo.save(uservo);
 	}
 	
 	public UserVO login(String email, String pwd) {
-		UserVO uservo = repo.findByUseremail(email);
+		UserVO uservo = Userrepo.findByUseremail(email);
 		
 		if (pwd.equals(uservo.getUserpwd())) {
 			return uservo;
@@ -58,7 +58,7 @@ public class UserService {
 		
 	}
 	
-	public void register(UserModel usermodel) {
+	public UserVO register(UserModel usermodel) {
 		UserVO temp = new UserVO();
 		temp.setUseremail(usermodel.getUseremail());
 		temp.setUsername(usermodel.getUsername());
@@ -69,18 +69,20 @@ public class UserService {
 		UserStatusVO status = statusRepo.findById(2).get();
 		temp.setUserstatusvo(status);
 	
-		repo.save(temp);
+		Userrepo.save(temp);
+		
+		return temp;
 	}
 	
 	public void adminUserEdit(Integer statusid, UserVO uservo) {
 		
 		if (statusid == uservo.getUserstatusvo().getStatusid()) {
-			repo.save(uservo);
+			Userrepo.save(uservo);
 		}else {
 			uservo.setUserstatusvo(statusRepo.findById(statusid).get());
 		}
 		
-		repo.save(uservo);
+		Userrepo.save(uservo);
 	}
 	
 

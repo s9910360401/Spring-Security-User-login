@@ -1,6 +1,6 @@
 package com.ogabe.user.model;
 
-import jakarta.persistence.Entity;
+
 import lombok.Data;
 
 @Data

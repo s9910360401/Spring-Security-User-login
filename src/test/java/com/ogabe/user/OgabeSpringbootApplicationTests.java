@@ -8,6 +8,7 @@ class OgabeSpringbootApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.err.println("test");
 	}
 
 }

@@ -25,14 +25,13 @@ public class SecurityConfig {
 	UserDetailsService userDetailsService;
 	
 	@Bean
-	public PasswordEncoder passwodEncoder() {
+	PasswordEncoder passwodEncoder() {
 		return new BCryptPasswordEncoder(11);
 	}
 	
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
-    }
+	@Autowired
+	AccessDeniedHandler accessDeniedHandler ;
+
 	
 	@Bean
 	public AuthenticationProvider authProvider() {
@@ -59,19 +58,19 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests()
 				.requestMatchers("/userpage")
-				.hasAnyAuthority("USER","ADMIN")
+				.hasAnyAuthority("USER","ADMIN","UNCERTIFIED")
 				.requestMatchers("/admin/**")
 				.hasAuthority("ADMIN")
 				.requestMatchers("/","/login","/**")
                 .permitAll()
                 .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
 				.and()
 		        .formLogin()
                   	.loginPage("/login")
                   	.usernameParameter("useremail")
                   	.passwordParameter("userpassword")
-					.defaultSuccessUrl("/")
+					.defaultSuccessUrl("/", true)
 					.loginProcessingUrl("/perfomlogin")
 					.failureUrl("/login?error=true")
 					.permitAll()

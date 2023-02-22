@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.net.http.HttpRequest;
 import java.sql.Date;
 import java.util.List;
-
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -23,9 +25,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ogabe.user.entity.UserStatusVO;
 import com.ogabe.user.entity.UserVO;
+import com.ogabe.user.entity.VerificationToken;
 import com.ogabe.user.model.UserModel;
+import com.ogabe.user.security.UserPrincipal;
+import com.ogabe.user.service.EmailService;
 import com.ogabe.user.service.UserService;
-
+import com.ogabe.user.service.UserStatusService;
+import com.ogabe.user.service.VerificationService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,10 +41,33 @@ import jakarta.servlet.http.HttpSession;
 public class UserController {
 	
 	@Autowired
-	UserService service;
+	UserService userService;
+	
+	@Autowired
+	EmailService emailService;
+	
+	@Autowired
+	VerificationService verificationService;
+	
+	@Autowired
+	UserStatusService userStatusService;
 	
 	@GetMapping("/")
-	public String home() {
+	public String home() throws UnknownHostException {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = null;
+		if (principal instanceof UserDetails) {
+		    username = ((UserDetails)principal).getUsername();
+		} else {
+		    username = principal.toString();
+		}
+		//若沒登入，security回傳的username會是anonymousUser
+		if(username.equals("anonymousUser")) {
+			System.out.println("沒登入狀態");
+		}else {
+			System.out.println("有登入狀態");
+		}
 		
 		return "index";
 	}
@@ -55,9 +84,25 @@ public class UserController {
     }
 	
 	@PostMapping("/getregister")
-	public String regiTest(@ModelAttribute UserModel usermodel) {
+	public String regiTest(@ModelAttribute UserModel usermodel) throws UnknownHostException {
 
-		service.register(usermodel);
+		
+		
+		UserVO uservo = userService.register(usermodel);
+		
+		VerificationToken verificationToken = new VerificationToken(uservo);
+
+		verificationService.saveToken(verificationToken);
+		InetAddress addr = InetAddress.getLocalHost();
+		
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(uservo.getUseremail());
+        mailMessage.setSubject("Complete Registration!");
+        mailMessage.setFrom("tibame105ogabe@gmail.com");
+        mailMessage.setText("To confirm your account, please click here : "
+        + "http://" + addr.getHostAddress() + ":8080/confirm-account?token=" + verificationToken.getConfirmationToken());
+
+        emailService.sendEmail(mailMessage);
 		
 		return "redirect:/login";
 	}
@@ -66,14 +111,16 @@ public class UserController {
 	@GetMapping("/userpage")
 	public String UserPage(Model m) {
 			
-			String useremail = null;
-			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			if (principal instanceof UserDetails) {
-				useremail = ((UserDetails)principal).getUsername();
-			}else {
-				useremail = principal.toString();
-			}
-			UserVO uservo = service.getUserByEmail(useremail);
+			
+			UserVO uservo = null;
+			UserPrincipal principal = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//			if (principal instanceof UserDetails) {
+//				uservo = principal.getUservo();
+//			}else {
+//				return "redirect:/login";
+//			} 
+			
+			uservo = principal.getUservo();
 			m.addAttribute("uservo", uservo);
 			
 
@@ -97,7 +144,8 @@ public class UserController {
 		}else {
 			useremail = principal.toString();
 		}
-		UserVO temp = service.getUserByEmail(useremail);
+		System.out.println(((UserPrincipal)principal).getUservo().getUseraddress());
+		UserVO temp = userService.getUserByEmail(useremail);
 
 		temp.setUsername(username);
 		temp.setUsernickname(usernickname);
@@ -107,7 +155,7 @@ public class UserController {
 			temp.setUserpic(file.getBytes());
 		}
 		
-		service.saveUser(temp);
+		userService.saveUser(temp);
 		return "redirect:/userpage";
 	}
 	
@@ -117,11 +165,10 @@ public class UserController {
 	}
 	
 	
-	
 	@GetMapping("/admin/userlist")
 	public String adminUserList(Model m) {
 		
-		List<UserVO> uservo = service.getAllUser();
+		List<UserVO> uservo = userService.getAllUser();
 		m.addAttribute("uservo", uservo);
 		
 		return "user_admin_list";
@@ -131,8 +178,8 @@ public class UserController {
 	@ResponseBody
 	public void showUserImg(@PathVariable Integer userid, HttpServletResponse res,
 			UserVO uservo) throws ServletException, IOException{
-		
-		uservo = service.getUserById(userid);
+		System.out.println(userid);
+		uservo = userService.getUserById(userid);
 		res.setContentType("image/jped, image/jpg, image/png, image/gif");
 		res.getOutputStream().write(uservo.getUserpic());
 		res.getOutputStream().close();
@@ -141,7 +188,7 @@ public class UserController {
 	
 	@GetMapping("/admin/edit/{userid}")
 	public String goAdminEdit(@PathVariable Integer userid, Model m) {
-		UserVO uservo = service.getUserById(userid);
+		UserVO uservo = userService.getUserById(userid);
 		m.addAttribute("uservo", uservo);
 		
 		return "user_admin_update";
@@ -161,7 +208,7 @@ public class UserController {
 			@RequestParam("userpic") MultipartFile file
 			) throws IOException {
 		
-		UserVO uservo = service.getUserById(userid);
+		UserVO uservo = userService.getUserById(userid);
 
 		uservo.setUseremail(useremail);
 		uservo.setUserpwd(userpwd);
@@ -176,10 +223,32 @@ public class UserController {
 			uservo.setUserpic(userpic);
 		}
 		
-		service.adminUserEdit(userStatusID, uservo);
+		userService.adminUserEdit(userStatusID, uservo);
 		
 		return "redirect:/admin/userlist";
-		
 	}
+	
+    @GetMapping("/confirm-account")
+    public ModelAndView confirmUserAccount(ModelAndView modelAndView, @RequestParam("token")String confirmationToken)
+    {
+    	VerificationToken token = verificationService.findByConfirmationToken(confirmationToken);
+
+        if(token != null)
+        {
+        	UserVO user = userService.getUserByEmail(token.getUservo().getUseremail());
+            user.setUserstatusvo(userStatusService.findById(2));
+            userService.saveUser(user);
+            modelAndView.setViewName("accountVerified");
+        }
+        else
+        {
+            modelAndView.addObject("message","The link is invalid or broken!");
+            modelAndView.setViewName("error");
+        }
+
+        return modelAndView;
+    }
+	
+	
 
 }

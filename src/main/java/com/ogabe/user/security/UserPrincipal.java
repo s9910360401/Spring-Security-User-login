@@ -25,6 +25,14 @@ public class UserPrincipal implements UserDetails{
 		
 		return Collections.singleton(new SimpleGrantedAuthority(uservo.getUserstatusvo().getRolename()));
 	}
+	
+	public UserVO getUservo() {
+		return uservo;
+	}
+
+	public void setUservo(UserVO uservo) {
+		this.uservo = uservo;
+	}
 
 	@Override
 	public String getPassword() {
