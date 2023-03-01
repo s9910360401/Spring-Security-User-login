@@ -2,15 +2,13 @@ package com.ogabe.user.controller;
 
 import java.io.IOException;
 import java.net.http.HttpRequest;
-import java.sql.Date;
+
 import java.util.List;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -47,7 +45,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import net.bytebuddy.utility.RandomString;
 
+
 @Controller
+@RequestMapping("/users")
 public class UserController {
 
 	@Autowired
@@ -100,15 +100,18 @@ public class UserController {
 	}
 	
 	@PostMapping("/register")
-	public String regiTest(@ModelAttribute UserModel usermodel, Model m, HttpServletRequest req) throws UnknownHostException {
+	public String regiTest(@ModelAttribute UserModel usermodel, @RequestParam(name="userpwdconfirm") String  userpwdconfirm, Model m, HttpServletRequest req) throws UnknownHostException {
 		
 		String useremail = usermodel.getUseremail();
+		String userpwdcheck = userpwdconfirm;
 		if(userService.getUserByEmail(useremail)!=null) {
 //			UserVO uservo = new UserVO();
 //			uservo.setUsername("123");
 			m.addAttribute("errormsg", "已被註冊");
 			return "user_register";
-			
+		}else if (usermodel.getUserpwd()!=userpwdconfirm) {
+			m.addAttribute("errormsg", "密碼不一致");
+			return "user_register";
 		}else {
 			UserVO uservo = userService.register(usermodel);
 

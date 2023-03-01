@@ -1,6 +1,5 @@
 package com.ogabe.user.model;
 
-
 import lombok.Data;
 
 @Data
