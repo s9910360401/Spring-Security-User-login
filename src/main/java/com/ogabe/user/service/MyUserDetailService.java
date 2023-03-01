@@ -22,7 +22,7 @@ public class MyUserDetailService implements UserDetailsService{
 		if(uservo == null) {
 			throw new UsernameNotFoundException("User not find!!");
 		}
-		System.out.println(uservo.getUserstatusvo().getRolename());
+//		System.out.println(uservo.getUserstatusvo().getRolename());
 		
 		UserPrincipal userPrincipal = new UserPrincipal(uservo);
 		

@@ -61,7 +61,8 @@ public class UserVO {
 	@Lob
 	private byte[] userpic;
 	
-
+	@Column(name="reset_password_token")
+	private String resetPasswordToken;
 
 	public Integer getUserid() {
 		return userid;
@@ -150,10 +151,22 @@ public class UserVO {
 	public void setUserpic(byte[] userpic) {
 		this.userpic = userpic;
 	}
+	
+	
+
+	public String getResetPasswordToken() {
+		return resetPasswordToken;
+	}
+
+	public void setResetPasswordToken(String resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
+	}
+
+
 
 	public UserVO(Integer userid, String useremail, String userpwd, String username, String usernickname,
 			String useraddress, String usertel, Integer viplevelid, Date userregidate, UserStatusVO userstatusvo,
-			byte[] userpic) {
+			byte[] userpic, String resetPasswordToken) {
 		super();
 		this.userid = userid;
 		this.useremail = useremail;
@@ -166,6 +179,7 @@ public class UserVO {
 		this.userregidate = userregidate;
 		this.userstatusvo = userstatusvo;
 		this.userpic = userpic;
+		this.resetPasswordToken = resetPasswordToken;
 	}
 
 	public UserVO() {

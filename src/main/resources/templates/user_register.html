@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
 <meta charset="UTF-8">
 <title>OGABE|會員註冊</title>
@@ -81,8 +81,11 @@
     <div class="row p-3" style="background-color: #EAE0DA;">
       <div class="col"></div>
       <div class="col">
-        <form action="getregister" method="post" name="register-form">
+        <form th:action="@{/register}"  method="post" name="register-form" th:object="${errormsg}">
           <div class="form-group col-sm-12">
+          	<div th:if="${errormsg!=null}">
+		    	<p class="text-danger">[[${errormsg}]]</p>
+		    </div>
             <label for="exampleInputEmail1">帳號</label>
             <input type="email" class="form-control" id="UserEmail1" placeholder="請輸入Email" name="useremail">
           </div><br>

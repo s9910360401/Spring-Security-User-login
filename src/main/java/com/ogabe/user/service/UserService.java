@@ -12,13 +12,14 @@ import com.ogabe.user.entity.UserVO;
 import com.ogabe.user.model.UserModel;
 import com.ogabe.user.repository.UserRepository;
 import com.ogabe.user.repository.UserStatusRepository;
+import com.ogabe.user.ultility.UserVONotFindException;
 
 
 @Service
 public class UserService {
 	
 	@Autowired
-	UserRepository Userrepo;
+	UserRepository userrepo;
 	@Autowired
 	UserStatusRepository statusRepo;
 	@Autowired
@@ -26,12 +27,12 @@ public class UserService {
 	
 	public List <UserVO> getAllUser() {
 		
-		return Userrepo.findAll();
+		return userrepo.findAll();
 	}
 	
 	
 	public UserVO getUserById(Integer userid) {
-		Optional<UserVO> uservo = Userrepo.findById(userid);
+		Optional<UserVO> uservo = userrepo.findById(userid);
 		if(uservo.isPresent()) {
 			return uservo.get();
 		}
@@ -39,17 +40,17 @@ public class UserService {
 	}
 	
 	public UserVO getUserByEmail(String useremail) {
-		UserVO uservo = Userrepo.findByUseremail(useremail);
+		UserVO uservo = userrepo.findByUseremail(useremail);
 
 		return uservo;
 	}
 	
 	public void saveUser(UserVO uservo) {
-		Userrepo.save(uservo);
+		userrepo.save(uservo);
 	}
 	
 	public UserVO login(String email, String pwd) {
-		UserVO uservo = Userrepo.findByUseremail(email);
+		UserVO uservo = userrepo.findByUseremail(email);
 		
 		if (pwd.equals(uservo.getUserpwd())) {
 			return uservo;
@@ -69,7 +70,7 @@ public class UserService {
 		UserStatusVO status = statusRepo.findById(2).get();
 		temp.setUserstatusvo(status);
 	
-		Userrepo.save(temp);
+		userrepo.save(temp);
 		
 		return temp;
 	}
@@ -77,13 +78,33 @@ public class UserService {
 	public void adminUserEdit(Integer statusid, UserVO uservo) {
 		
 		if (statusid == uservo.getUserstatusvo().getStatusid()) {
-			Userrepo.save(uservo);
+			userrepo.save(uservo);
 		}else {
 			uservo.setUserstatusvo(statusRepo.findById(statusid).get());
 		}
 		
-		Userrepo.save(uservo);
+		userrepo.save(uservo);
 	}
 	
+	public void updateResetPassword(String token, String email) throws UserVONotFindException {
+		UserVO uservo = userrepo.findByUseremail(email);
+		
+		if(uservo != null) {
+			uservo.setResetPasswordToken(token);
+			userrepo.save(uservo);
+		}else {
+			throw new UserVONotFindException("查無  "+ email + " 此註冊信箱，請確認!!");
+		}
+	}
+	
+	public UserVO getUserByResetPasswordToken(String resetPasswordToken) {
+		return userrepo.findByResetPasswordToken(resetPasswordToken);
+	}
+	
+	public void resetPassword(UserVO uservo, String newPassword) {
+		uservo.setUserpwd(passwodEncoder.encode(newPassword));
+		uservo.setResetPasswordToken(null);
+		userrepo.save(uservo);
+	}
 
 }
