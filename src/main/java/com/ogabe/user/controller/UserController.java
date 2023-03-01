@@ -47,7 +47,6 @@ import net.bytebuddy.utility.RandomString;
 
 
 @Controller
-@RequestMapping("/users")
 public class UserController {
 
 	@Autowired
@@ -109,10 +108,12 @@ public class UserController {
 //			uservo.setUsername("123");
 			m.addAttribute("errormsg", "已被註冊");
 			return "user_register";
-		}else if (usermodel.getUserpwd()!=userpwdconfirm) {
-			m.addAttribute("errormsg", "密碼不一致");
-			return "user_register";
-		}else {
+		}
+//		else if (usermodel.getUserpwd()!=userpwdconfirm) {
+//			m.addAttribute("errormsg", "密碼不一致");
+//			return "user_register";
+//		}
+		else {
 			UserVO uservo = userService.register(usermodel);
 
 			VerificationToken verificationToken = new VerificationToken(uservo);
@@ -319,7 +320,7 @@ public class UserController {
 
 		if (token != null) {
 			UserVO user = userService.getUserByEmail(token.getUservo().getUseremail());
-			user.setUserstatusvo(userStatusService.findById(2));
+			user.setUserstatusvo(userStatusService.findById(3));
 			userService.saveUser(user);
 			modelAndView.setViewName("accountVerified");
 		} else {
